@@ -1,0 +1,52 @@
+variable "subnets-compute" {
+    description = "public subnetes for compute instances"
+}
+variable "ami-jenkins" {
+    type = string
+    description = "ami for jenkins"
+}
+variable "ami-jfrog" {
+    type = string
+    description = "ami for jfrob"
+}
+variable "ami-sonar" {
+    type = string
+    description = "ami for sonar"
+}
+
+variable "ami-bastion" {
+    type = string
+    description = "ami for bastion"
+}
+
+
+variable "ami-nginx" {
+    type = string
+    description = "ami for nginx"
+}
+
+
+variable "ami-tooling" {
+    type = string
+    description = "ami for tooling"
+}
+
+
+variable "ami-wordpress" {
+    type = string
+    description = "ami for wordpress"
+}
+
+variable "sg-compute" {
+    description = "security group for compute instances"
+}
+variable "keypair" {
+    type = string
+    description = "keypair for instances"
+}
+
+variable "tags" {
+  description = "A mapping of tags to assign to all resources."
+  type        = map(string)
+  default     = {}
+}
