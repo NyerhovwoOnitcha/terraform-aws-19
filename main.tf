@@ -1,47 +1,47 @@
 
-# Create backend S3 bucket
-resource "aws_s3_bucket" "state_bucket" {
-  bucket = "papi-dev-terraform-bucket"
+# # Create backend S3 bucket
+# resource "aws_s3_bucket" "state_bucket" {
+#   bucket = "papi-dev-terraform-bucket"
 
-  tags = {
-    Name = "local_state_bucket"
+#   tags = {
+#     Name = "local_state_bucket"
 
-  }
-}
+#   }
+# }
 
-# Enable versioning for the bucket
-resource "aws_s3_bucket_versioning" "state_bucket_versioning" {
-  bucket = aws_s3_bucket.state_bucket.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
+# # Enable versioning for the bucket
+# resource "aws_s3_bucket_versioning" "state_bucket_versioning" {
+#   bucket = aws_s3_bucket.state_bucket.id
+#   versioning_configuration {
+#     status = "Enabled"
+#   }
+# }
 
-# Enable server side encryption.
-resource "aws_s3_bucket_server_side_encryption_configuration" "state_bucket_SSC" {
-  bucket = aws_s3_bucket.state_bucket.id
+# # Enable server side encryption.
+# resource "aws_s3_bucket_server_side_encryption_configuration" "state_bucket_SSC" {
+#   bucket = aws_s3_bucket.state_bucket.id
 
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-  }
-}
-
-
+#   rule {
+#     apply_server_side_encryption_by_default {
+#       sse_algorithm = "AES256"
+#     }
+#   }
+# }
 
 
-# Create DynamoDB resource for lock and consistency
 
-resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "terraform-locks"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
-}
+
+# # Create DynamoDB resource for lock and consistency
+
+# resource "aws_dynamodb_table" "terraform_locks" {
+#   name         = "terraform-locks"
+#   billing_mode = "PAY_PER_REQUEST"
+#   hash_key     = "LockID"
+#   attribute {
+#     name = "LockID"
+#     type = "S"
+#   }
+# }
 
 
 
@@ -92,7 +92,9 @@ module "Autoscaling" {
   nginx-alb-tgt     = module.ALB.nginx-tgt
   wordpress-alb-tgt = module.ALB.wordpress-tgt
   bastion-SG        = module.Security.bastion-SG
-  ami               = var.ami
+  ami-bastion       = var.ami-bastion
+  ami-nginx         = var.ami-nginx
+  ami-webservers    = var.ami-webservers
   instance_type     = var.instance_type
   instance_pfp      = module.VPC.instance_pfp
   public_subnet1    = module.VPC.public_subnet1
@@ -122,16 +124,17 @@ module "RDS" {
   master-username = var.master-username
   private_subnets = [module.VPC.private_sub3, module.VPC.private_sub4]
 }
+
+
 module "compute" {
   source          = "./modules/Compute"
   subnets-compute = module.VPC.public_subnet1
   sg-compute      = module.Security.ext-alb-sg
-  keypair         = var.ami
-  ami-jfrog       = var.ami
-  ami-jenkins     = var.ami
-  ami-sonar       = var.ami
-  ami-tooling = var.ami
-  ami-nginx = var.ami
-  ami-bastion = var.ami
-  ami-wordpress = var.ami
+  keypair         = var.keypair
+  ami-jfrog       = var.ami-jfrog
+  ami-jenkins     = var.ami-jenkins
+  ami-sonar       = var.ami-sonar
+  ami-webservers = var.ami-webservers
+  ami-nginx = var.ami-nginx
+  ami-bastion = var.ami-bastion
 }

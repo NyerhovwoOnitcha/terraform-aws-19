@@ -34,7 +34,7 @@ resource "aws_instance" "nginx" {
 
 # create instance for wordpress
 resource "aws_instance" "wordpress" {
-  ami                         = var.ami-wordpress
+  ami                         = var.ami-webservers
   instance_type               = "t2.micro"
   subnet_id                   = var.subnets-compute
   vpc_security_group_ids      = [var.sg-compute]
@@ -51,7 +51,7 @@ resource "aws_instance" "wordpress" {
 
 # create instance for tooling
 resource "aws_instance" "tooling" {
-  ami                         = var.ami-tooling
+  ami                         = var.ami-webservers
   instance_type               = "t2.micro"
   subnet_id                   = var.subnets-compute
   vpc_security_group_ids      = [var.sg-compute]

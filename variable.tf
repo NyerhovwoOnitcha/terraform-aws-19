@@ -39,17 +39,6 @@ variable "int_lb_name" {
 
 }
 
-# variable "int_lb_SG" {
-#   description = "int lb security group"
-# }
-
-# variable "private_sub1" {
-#   description = "private subnet1"
-# }
-
-# variable "private_sub2" {
-#   description = "private subnet2"
-# }
 
 variable "wordpress_tgt" {
   description = "wordress target group name"
@@ -68,64 +57,14 @@ variable "ext_lb_name" {
   description = "EXT ALB NAME"
 }
 
-# variable "ex_LB_sg" {
-#   description = "EXT ALB security group"
-# }
-
-# variable "public_subnet1" {
-#   description = "public subnet 1"
-# }
-
-# variable "public_subnet2" {
-#   description = "public subnet 2"
-# }
-
-# variable "nginx-alb-tgt" {
-#   description = "nginx-reverse proxy target group arn"
-# }
-
-# variable "wordpress-alb-tgt" {
-#   description = "wordpress target group arn"
-# }
-
-# variable "bastion-SG" {
-#   description = "bastion security group ID"
-# }
-
 variable "instance_type" {
   description = "the instance type"
 }
-
-# variable "instance_pfp" {
-#   description = "instance profile id"
-# }
-
-# variable "efs_private_subnet1" {
-#   description = "first subnet for mount target"
-# }
-
-# variable "efs_private_subnet2" {
-#   description = "second subnet for mount target"
-# }
-
-# variable "datalayer-SG" {
-#   description = "data layer security group.id"
-# }
-
-# variable "private_subnets" {
-#   description = "Private subnets for DB subnets group"
-# }
-
 
 
 variable "name" {
   type    = string
   default = "ACS"
-}
-
-variable "ami" {
-  type        = string
-  description = "AMI ID for the launch template"
 }
 
 variable "keypair" {
@@ -144,4 +83,34 @@ variable "master-username" {
 
 variable "master-password" {
   type = string
+}
+
+variable "ami-jenkins" {
+    type = string
+    description = "ami for jenkins"
+}
+variable "ami-jfrog" {
+    type = string
+    description = "ami for jfrob"
+}
+variable "ami-sonar" {
+    type = string
+    description = "ami for sonar"
+}
+
+variable "ami-bastion" {
+    type = string
+    description = "ami for bastion"
+}
+
+
+variable "ami-nginx" {
+    type = string
+    description = "ami for nginx"
+}
+
+
+variable "ami-webservers" {
+    type = string
+    description = "ami for webservers"
 }

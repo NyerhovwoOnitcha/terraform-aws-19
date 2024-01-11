@@ -1,6 +1,7 @@
 variable "subnets-compute" {
     description = "public subnetes for compute instances"
 }
+
 variable "ami-jenkins" {
     type = string
     description = "ami for jenkins"
@@ -26,16 +27,11 @@ variable "ami-nginx" {
 }
 
 
-variable "ami-tooling" {
+variable "ami-webservers" {
     type = string
-    description = "ami for tooling"
+    description = "ami for webservers"
 }
 
-
-variable "ami-wordpress" {
-    type = string
-    description = "ami for wordpress"
-}
 
 variable "sg-compute" {
     description = "security group for compute instances"

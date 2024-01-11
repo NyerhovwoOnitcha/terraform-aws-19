@@ -1,6 +1,18 @@
-variable "ami" {
-  description = "ami id"
+variable "ami-bastion" {
+    type = string
+    description = "ami for bastion"
 }
+
+variable "ami-nginx" {
+    type = string
+    description = "ami for nginx"
+}
+
+variable "ami-webservers" {
+  type = string
+  description = "ami for webservers"
+}
+
 
 variable "keypair" {
   description = "keypair "
@@ -34,16 +46,6 @@ variable "public_subnet2" {
 variable "nginx-alb-tgt" {
   description = "nginx-reverse proxy target group arn"
 }
-# variable "public_subnets" {
-#     type = list(any)
-#   description = "list of public subnets"
-# }
-
-
-# variable "private_subnets" {
-#     type = list(any)
-#   description = "list of private subnets"
-# }
 
 variable "private_subnet1" {
   description = "private subnet1"
