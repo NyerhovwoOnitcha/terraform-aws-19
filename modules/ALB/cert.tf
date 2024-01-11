@@ -2,7 +2,7 @@
 
 # Create the certificate using a wildcard for all the domains created in oyindamola.gq
 resource "aws_acm_certificate" "techzeus" {
-  domain_name       = "*techzeus.shop"
+  domain_name       = "*.techzeus.shop"
   validation_method = "DNS"
 }
 

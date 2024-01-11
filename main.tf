@@ -91,7 +91,7 @@ module "Autoscaling" {
   source            = "./modules/Autoscaling"
   nginx-alb-tgt     = module.ALB.nginx-tgt
   wordpress-alb-tgt = module.ALB.wordpress-tgt
-  bastion-SG        = module.Security.bastion-SG
+  bastion-SG        = [module.Security.bastion-SG]
   ami-bastion       = var.ami-bastion
   ami-nginx         = var.ami-nginx
   ami-webservers    = var.ami-webservers
@@ -101,9 +101,9 @@ module "Autoscaling" {
   public_subnet2    = module.VPC.public_subnet2
   private_subnet1   = module.VPC.private_sub1
   private_subnet2   = module.VPC.private_sub2
-  nginx-sg          = module.Security.nginx-SG
+  nginx-sg          = [module.Security.nginx-SG]
   keypair           = var.keypair
-  webservers-sg     = module.Security.webservers-SG
+  webservers-sg     = [module.Security.webservers-SG]
   tooling_alb_tgt   = module.ALB.tooling-tgt
   #   public_subnets    = [module.VPC.public_subnet1, module.VPC.public_subnet2] 
   #   private_subnets   = [module.VPC.private_sub1, module.VPC.private_sub2]
@@ -119,7 +119,7 @@ module "EFS" {
 
 module "RDS" {
   source          = "./modules/RDS"
-  datalayer-SG    = module.Security.datalayer-SG
+  datalayer-SG    = [module.Security.datalayer-SG]
   master-password = var.master-password
   master-username = var.master-username
   private_subnets = [module.VPC.private_sub3, module.VPC.private_sub4]
@@ -129,11 +129,10 @@ module "RDS" {
 module "compute" {
   source          = "./modules/Compute"
   subnets-compute = module.VPC.public_subnet1
-  sg-compute      = module.Security.ext-alb-sg
+  sg-compute      = [module.Security.ext-alb-sg]
+  instance_type  = "var.instance_type"
   keypair         = var.keypair
-  ami-jfrog       = var.ami-jfrog
-  ami-jenkins     = var.ami-jenkins
-  ami-sonar       = var.ami-sonar
+  ami-compute     = var.ami-compute     
   ami-webservers = var.ami-webservers
   ami-nginx = var.ami-nginx
   ami-bastion = var.ami-bastion

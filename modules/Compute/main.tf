@@ -1,9 +1,9 @@
 # create instance for bastion
 resource "aws_instance" "bastion" {
   ami                         = var.ami-bastion
-  instance_type               = "t2.micro"
+  instance_type               = "var.instance_type"
   subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = [var.sg-compute]
+  vpc_security_group_ids      = var.sg-compute
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -18,9 +18,9 @@ resource "aws_instance" "bastion" {
 # create instance for nginx
 resource "aws_instance" "nginx" {
   ami                         = var.ami-nginx
-  instance_type               = "t2.micro"
+  instance_type               = "var.instance_type"
   subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = [var.sg-compute]
+  vpc_security_group_ids      = var.sg-compute
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -35,9 +35,9 @@ resource "aws_instance" "nginx" {
 # create instance for wordpress
 resource "aws_instance" "wordpress" {
   ami                         = var.ami-webservers
-  instance_type               = "t2.micro"
+  instance_type               = "var.instance_type"
   subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = [var.sg-compute]
+  vpc_security_group_ids      = var.sg-compute
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -52,9 +52,9 @@ resource "aws_instance" "wordpress" {
 # create instance for tooling
 resource "aws_instance" "tooling" {
   ami                         = var.ami-webservers
-  instance_type               = "t2.micro"
+  instance_type               = "var.instance_type"
   subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = [var.sg-compute]
+  vpc_security_group_ids      = var.sg-compute
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -69,10 +69,10 @@ resource "aws_instance" "tooling" {
 
 # create instance for jenkins
 resource "aws_instance" "Jenkins" {
-  ami                         = var.ami-jenkins
-  instance_type               = "t2.micro"
+  ami                         = var.ami-compute
+  instance_type               = "var.instance_type"
   subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = [var.sg-compute]
+  vpc_security_group_ids      = var.sg-compute
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -88,10 +88,10 @@ resource "aws_instance" "Jenkins" {
 
 #create instance for sonbarqube
 resource "aws_instance" "sonbarqube" {
-  ami                         = var.ami-sonar
-  instance_type               = "t2.medium"
+  ami                         = var.ami-compute
+  instance_type               = "var.instance_type"
   subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = [var.sg-compute]
+  vpc_security_group_ids      = var.sg-compute
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -106,10 +106,10 @@ resource "aws_instance" "sonbarqube" {
 
 # create instance for artifactory
 resource "aws_instance" "artifactory" {
-  ami                         = var.ami-jfrog
-  instance_type               = "t2.medium"
+  ami                         = var.ami-bastion
+  instance_type               = "var.instance_type"
   subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = [var.sg-compute]
+  vpc_security_group_ids      = var.sg-compute
   associate_public_ip_address = true
   key_name                    = var.keypair
 

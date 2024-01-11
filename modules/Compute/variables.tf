@@ -2,17 +2,13 @@ variable "subnets-compute" {
     description = "public subnetes for compute instances"
 }
 
-variable "ami-jenkins" {
+variable "instance_type" {
+  description = "instance type, will be t2-medium"
+}
+
+variable "ami-compute" {
     type = string
     description = "ami for jenkins"
-}
-variable "ami-jfrog" {
-    type = string
-    description = "ami for jfrob"
-}
-variable "ami-sonar" {
-    type = string
-    description = "ami for sonar"
 }
 
 variable "ami-bastion" {

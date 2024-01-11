@@ -34,10 +34,9 @@ account_no = "597081703771"
 
 master-username = "cloudnloud"
 master-password = "12345645578"
-ami-jfrog = ""
-ami-sonar = "ami-0d99ff85fbddc282a"
 
 ami-bastion = "ami-0b1170a74b18c6f77"
 ami-nginx = " ami-0108d161909b997a1"
-ami-jenkins = "ami-0d99ff85fbddc282a"
+ami-compute = "ami-0cc5bc546f28f5ea0"
+
 ami-webservers ="ami-0e9c42f139abde3c7"

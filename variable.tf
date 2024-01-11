@@ -85,15 +85,8 @@ variable "master-password" {
   type = string
 }
 
-variable "ami-jenkins" {
-    type = string
-    description = "ami for jenkins"
-}
-variable "ami-jfrog" {
-    type = string
-    description = "ami for jfrob"
-}
-variable "ami-sonar" {
+
+variable "ami-compute" {
     type = string
     description = "ami for sonar"
 }

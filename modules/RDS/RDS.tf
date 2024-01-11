@@ -24,6 +24,6 @@ resource "aws_db_instance" "ACS-rds" {
   parameter_group_name   = "default.mysql5.7"
   db_subnet_group_name   = aws_db_subnet_group.ACS-rds.name
   skip_final_snapshot    = true
-  vpc_security_group_ids = [var.datalayer-SG]
+  vpc_security_group_ids = var.datalayer-SG
   multi_az               = "true"
 }

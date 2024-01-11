@@ -3,7 +3,7 @@
 resource "aws_launch_template" "wordpress-launch-template" {
   image_id               = var.ami-webservers
   instance_type          = var.instance_type
-  vpc_security_group_ids = [var.webservers-sg]
+  vpc_security_group_ids = var.webservers-sg
 
   iam_instance_profile {
     name = var.instance_pfp
@@ -38,7 +38,7 @@ resource "aws_launch_template" "wordpress-launch-template" {
 resource "aws_launch_template" "tooling-launch-template" {
   image_id               = var.ami-webservers
   instance_type          = var.instance_type
-  vpc_security_group_ids = [var.webservers-sg]
+  vpc_security_group_ids = var.webservers-sg
 
   iam_instance_profile {
     name = var.instance_pfp
