@@ -13,12 +13,12 @@ variable "ex_LB_sg" {
 }
 
 variable "public_subnet1" {
-  type = number
+  
   description = "public subnet 1"
 }
 
 variable "public_subnet2" {
-  type = number
+  
   description = "public subnet 2"
 }
 
@@ -42,12 +42,12 @@ variable "int_lb_SG" {
 }
 
 variable "private_sub1" {
-  type = number
+  
   description = "private subnet1"
 }
 
 variable "private_sub2" {
-  type = number
+  
   description = "private subnet2"
 }
 

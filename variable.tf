@@ -15,11 +15,11 @@ variable "enable_dns_hostnames" {
 }
 
 variable "preferred_number_of_public_subnets" {
-  default = null
+  
 }
 
 variable "preferred_number_of_private_subnets" {
-  default = null
+  
 }
 
 variable "tags" {

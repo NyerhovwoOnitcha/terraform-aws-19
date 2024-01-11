@@ -5,16 +5,17 @@ output "vpc_id" {
 output "instance_pfp" {
   value = aws_iam_instance_profile.ip.id
 }
-output "public_subnets" {
-  value = var.public_subnets
-}
+# output "public_subnets" {
+#   value = var.public_subnets
+# }
 
-output "private_subnets" {
-  value = var.private_subnets
+# output "private_subnets" {
+#   value = var.private_subnets
   
-}
+# }
 
 output "public_subnet1" {
+  
  value = aws_subnet.public[0].id
 }
 
