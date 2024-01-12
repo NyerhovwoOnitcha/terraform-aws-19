@@ -129,15 +129,10 @@ module "compute" {
   source          = "./modules/Compute"
   # subnets-compute = module.VPC.public_subnet1
   bastion-SG = [module.Security.bastion-SG]
-  nginx-SG = [module.Security.nginx-SG]
-  webservers-SG = [module.Security.webservers-SG]
-  ext-alb-sg = [module.Security.ext-alb-sg]
   keypair         = var.keypair
   ami-compute     = var.ami-compute     
   ami-webservers = var.ami-webservers
   ami-nginx = var.ami-nginx
   ami-bastion = var.ami-bastion
   public_subnet1 = module.VPC.public_subnet1
-  private_subnet1 = module.VPC.private_sub1
-  private_subnet2 = module.VPC.private_sub2
 }
