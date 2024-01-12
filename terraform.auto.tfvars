@@ -36,7 +36,7 @@ master-username = "cloudnloud"
 master-password = "12345645578"
 
 ami-bastion = "ami-0b1170a74b18c6f77"
-ami-nginx = " ami-0108d161909b997a1"
+ami-nginx = "ami-0108d161909b997a1"
 ami-compute = "ami-0cc5bc546f28f5ea0"
 
 ami-webservers ="ami-0e9c42f139abde3c7"
