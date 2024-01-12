@@ -95,7 +95,6 @@ module "Autoscaling" {
   ami-bastion       = var.ami-bastion
   ami-nginx         = var.ami-nginx
   ami-webservers    = var.ami-webservers
-  instance_type     = "var.instance_type"
   instance_pfp      = module.VPC.instance_pfp
   public_subnet1    = module.VPC.public_subnet1
   public_subnet2    = module.VPC.public_subnet2
@@ -130,7 +129,6 @@ module "compute" {
   source          = "./modules/Compute"
   subnets-compute = module.VPC.public_subnet1
   sg-compute      = [module.Security.ext-alb-sg]
-  instance_type  = "var.instance_type"
   keypair         = var.keypair
   ami-compute     = var.ami-compute     
   ami-webservers = var.ami-webservers

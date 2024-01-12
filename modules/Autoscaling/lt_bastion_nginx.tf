@@ -5,7 +5,7 @@ resource "random_shuffle" "az_list" {
 
 resource "aws_launch_template" "bastion-launch-template" {
   image_id               = var.ami-bastion
-  instance_type          = var.instance_type
+  instance_type          = "t2.medium"
   vpc_security_group_ids = var.bastion-SG
 
   iam_instance_profile {
@@ -42,7 +42,7 @@ resource "aws_launch_template" "bastion-launch-template" {
 
 resource "aws_launch_template" "nginx-launch-template" {
   image_id               = var.ami-nginx
-  instance_type          = var.instance_type
+  instance_type          = "t2.medium"
   vpc_security_group_ids = var.nginx-sg
 
   iam_instance_profile {

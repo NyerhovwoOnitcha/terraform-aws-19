@@ -31,10 +31,6 @@ variable "instance_pfp" {
   description = "instance profile id"
 }
 
-variable "instance_type" {
-  description = "the instance type"
-}
-
 
 variable "public_subnet1" {
   description = "public subnet1"
