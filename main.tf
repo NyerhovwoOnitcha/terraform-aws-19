@@ -95,7 +95,7 @@ module "Autoscaling" {
   ami-bastion       = var.ami-bastion
   ami-nginx         = var.ami-nginx
   ami-webservers    = var.ami-webservers
-  instance_type     = var.instance_type
+  instance_type     = "var.instance_type"
   instance_pfp      = module.VPC.instance_pfp
   public_subnet1    = module.VPC.public_subnet1
   public_subnet2    = module.VPC.public_subnet2
