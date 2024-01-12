@@ -2,9 +2,6 @@ variable "subnets-compute" {
     description = "public subnetes for compute instances"
 }
 
-variable "instance_type" {
-  description = "instance type, will be t2-medium"
-}
 
 variable "ami-compute" {
     type = string

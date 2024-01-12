@@ -9,7 +9,7 @@ resource "aws_kms_key" "ACS-kms" {
     {
       "Sid": "Enable IAM User Permissions",
       "Effect": "Allow",
-      "Principal": { "AWS": "arn:aws:iam::${var.account_no}:user/terraform-user" },
+      "Principal": { "AWS": "arn:aws:iam::${var.account_no}:user/root" },
       "Action": "kms:*",
       "Resource": "*"
     }
@@ -28,7 +28,7 @@ resource "aws_kms_alias" "alias" {
 
 resource "aws_efs_file_system" "ACS-efs" {
   encrypted  = true
-  kms_key_id = aws_kms_key.ACS-kms.arn
+  # kms_key_id = aws_kms_key.ACS-kms.arn
 
   tags = merge(
     var.tags,

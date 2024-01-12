@@ -27,7 +27,7 @@ target_type = "instance"
 
 ext_lb_name = "ext-alb"
 
-instance_type = "t2.medium"
+
 
 keypair    = "papi"
 account_no = "597081703771"

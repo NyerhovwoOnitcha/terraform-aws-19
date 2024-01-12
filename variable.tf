@@ -57,9 +57,6 @@ variable "ext_lb_name" {
   description = "EXT ALB NAME"
 }
 
-variable "instance_type" {
-  description = "the instance type"
-}
 
 
 variable "name" {
