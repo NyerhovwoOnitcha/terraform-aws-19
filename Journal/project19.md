@@ -73,5 +73,16 @@ But our bastion.sh script contains more commands installing more things, this is
 
 #### Nginx AMI
 
-The only difference here is that we are adding commands to create the self signed certificate. `The subj command` helps us fill in the required parameters for the certificate.
+The only difference here is that we are adding commands to create the self signed certificate. `The subj command` helps us fill in the required parameters when creating  the certificate.
 
+#### Webserveers AMI
+Only extra thing we did here was adding commands to install java.
+
+## Further Tinkering
+After creating your ami's with packer and feeding the amis to your infrastructure the target health checks will fail, this is cos even though the instances where created i.e the listeners, they still have not been configured, for the reverse proyy instance nginx has not been installed and thus /healthstatus has not been configured, same with the webservers where apache has not been installed and /healthstatus has not been configured.
+
+To solve this since our infrastucture already spins up the target, comment out:
+    - Remove the instances as a listener for the loadbalancers i.e you created listeners for nginx target group and both webservers target groups which the instances, remove them.
+    
+    - The autoscaling groups is attached to the loadbalancer so comment out the autoscaling group for nginx, wordpress and tooling
+    - comment out the autoscaling group attachement to the nginx, wordpress and tooling 
