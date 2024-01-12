@@ -1,27 +1,49 @@
 # create key from key management system
+data "aws_caller_identity" "current" {}
+
 resource "aws_kms_key" "ACS-kms" {
   description = "KMS key "
-  policy      = <<EOF
-  {
-  "Version": "2012-10-17",
-  "Id": "kms-key-policy",
-  "Statement": [
-    {
-      "Sid": "Enable IAM User Permissions",
-      "Effect": "Allow",
-      "Principal": { "AWS": "arn:aws:iam::${var.account_no}:user/root" },
-      "Action": "kms:*",
-      "Resource": "*"
-    }
-  ]
-}
-EOF
+#   policy      = <<EOF
+#   {
+#   "Version": "2012-10-17",
+#   "Id": "kms-key-policy",
+#   "Statement": [
+#     {
+#       "Sid": "Enable IAM User Permissions",
+#       "Effect": "Allow",
+#       "Principal": { "AWS": "arn:aws:iam::${var.account_no}:user/root" },
+#       "Action": "kms:*",
+#       "Resource": "*"
+#     }
+#   ]
+# }
+# EOF
 }
 
 # create key alias
 resource "aws_kms_alias" "alias" {
   name          = "alias/kms"
   target_key_id = aws_kms_key.ACS-kms.key_id
+}
+
+resource "aws_kms_key_policy" "kms-key-policy" {
+  key_id = aws_kms_key.ACS-kms.id
+  policy = jsonencode({
+    Id = "kms-key-policy"
+    Statement = [
+      {
+        Action = "kms:*"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+
+        Resource = "*"
+        Sid      = "Enable IAM User Permissions"
+      },
+    ]
+    Version = "2012-10-17"
+  })
 }
 
 # create Elastic file system ---------------
