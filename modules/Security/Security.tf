@@ -30,5 +30,10 @@ locals {
         name = "datalayer-SG"
         description = "datalayer-SG"
     }
+
+    compute-sg = {
+        name = "compute-sg"
+        description = "sg-compute"
+    }
   }
 }

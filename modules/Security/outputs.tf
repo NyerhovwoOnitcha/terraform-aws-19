@@ -26,3 +26,6 @@ output "nginx-SG" {
   value = aws_security_group.ACS["nginx-SG"].id
 }
 
+output "compute-sg" {
+  value = aws_security_group.ACS["compute-sg"].id
+}

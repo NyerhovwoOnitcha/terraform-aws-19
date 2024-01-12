@@ -83,6 +83,9 @@ After creating your ami's with packer and feeding the amis to your infrastructur
 
 To solve this since our infrastucture already spins up the target, comment out:
     - Remove the instances as a listener for the loadbalancers i.e you created listeners for nginx target group and both webservers target groups which the instances, remove them.
-    
+
     - The autoscaling groups is attached to the loadbalancer so comment out the autoscaling group for nginx, wordpress and tooling
     - comment out the autoscaling group attachement to the nginx, wordpress and tooling 
+
+##  CONFIGURARION.
+We've created the instances and deregistred them as targets, the next thing we want to do is to configured

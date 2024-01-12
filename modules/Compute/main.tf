@@ -2,8 +2,8 @@
 resource "aws_instance" "bastion" {
   ami                         = var.ami-bastion
   instance_type               = "t2.medium"
-  subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = var.sg-compute
+  subnet_id                  = var.private_subnet1
+  vpc_security_group_ids      = var.bastion-SG
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -19,8 +19,8 @@ resource "aws_instance" "bastion" {
 resource "aws_instance" "nginx" {
   ami                         = var.ami-nginx
   instance_type               = "t2.medium"
-  subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = var.sg-compute
+  subnet_id                   = var.private_subnet1
+  vpc_security_group_ids      = var.nginx-SG
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -36,8 +36,8 @@ resource "aws_instance" "nginx" {
 resource "aws_instance" "wordpress" {
   ami                         = var.ami-webservers
   instance_type               = "t2.medium"
-  subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = var.sg-compute
+  subnet_id                   = var.private_subnet1
+  vpc_security_group_ids      = var.webservers-SG
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -53,8 +53,8 @@ resource "aws_instance" "wordpress" {
 resource "aws_instance" "tooling" {
   ami                         = var.ami-webservers
   instance_type               = "t2.medium"
-  subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = var.sg-compute
+  subnet_id                   = var.private_subnet2
+  vpc_security_group_ids      = var.webservers-SG
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -71,8 +71,8 @@ resource "aws_instance" "tooling" {
 resource "aws_instance" "Jenkins" {
   ami                         = var.ami-compute
   instance_type               = "t2.medium"
-  subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = var.sg-compute
+  subnet_id                   = var.public_subnet1
+  vpc_security_group_ids      = var.ext-alb-sg
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -90,8 +90,8 @@ resource "aws_instance" "Jenkins" {
 resource "aws_instance" "sonbarqube" {
   ami                         = var.ami-compute
   instance_type               = "t2.medium"
-  subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = var.sg-compute
+  subnet_id                   = var.public_subnet1
+  vpc_security_group_ids      = var.ext-alb-sg
   associate_public_ip_address = true
   key_name                    = var.keypair
 
@@ -108,8 +108,8 @@ resource "aws_instance" "sonbarqube" {
 resource "aws_instance" "artifactory" {
   ami                         = var.ami-bastion
   instance_type               = "t2.medium"
-  subnet_id                   = var.subnets-compute
-  vpc_security_group_ids      = var.sg-compute
+  subnet_id                   = var.public_subnet1
+  vpc_security_group_ids      = var.ext-alb-sg
   associate_public_ip_address = true
   key_name                    = var.keypair
 
