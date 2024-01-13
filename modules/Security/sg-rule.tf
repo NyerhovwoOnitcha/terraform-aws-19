@@ -88,7 +88,7 @@ resource "aws_security_group_rule" "inbound-webserver-https" {
 }
 
 #testing connections
-resource "aws_security_group_rule" "443-from-bastion-webserver" {
+resource "aws_security_group_rule" "https-from-bastion-webserver" {
   type                     = "ingress"
   from_port                = 443
   to_port                  = 443
