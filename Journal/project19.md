@@ -88,4 +88,18 @@ To solve this since our infrastucture already spins up the target, comment out:
     - comment out the autoscaling group attachement to the nginx, wordpress and tooling 
 
 ##  CONFIGURARION.
-We've created the instances and deregistred them as targets, the next thing we want to do is to configured
+We've created the instances via the ASG and deregistred them as targets to enable us make the necessary configurations, to do so we will be using ansible. We will be doing tnis from the bastion server so ssh into the bastion server.
+    - clone the ansible deploy folder into the bastion server
+    - We will be using dynamic inventory to update the ansible inventory file, for this ansible will need access to our aws account. run the `aws configure` command and configure accordingly
+    - clone the ansible-deploy folder into the bastion server, observe how we are using dynamic inventory to automatically get the ip address of our servers. we achieve this using a plugin. use the link for further reading. [Ansible dynamic inventory](https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html#examples).
+    - update the following in the terraform script that will be used to configure the server. We did this in project 15
+        - RDS endpoints for wordpress and tooling.
+
+	    - Database Name, Password and username for wordpress and tooling
+	    - Access point ID for wordpress and tooling
+
+	    - Internal Loadbalancer DNS for nginx reverse-proxy. 
+
+### Explanation of tooling and wordpress ansible role
+    
+    
