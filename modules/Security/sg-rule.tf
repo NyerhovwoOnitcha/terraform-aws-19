@@ -29,15 +29,6 @@ resource "aws_security_group_rule" "bastion-SGR-ingress" {
   security_group_id = aws_security_group.ACS["bastion-SG"].id
 }
 
-#testing commection
-resource "aws_security_group_rule" "bastion-443" {
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.ACS["bastion-SG"].id
-}
 
 #################################################################
 # SECURITY GROUP RULE FOR REVERSE PROXY
@@ -84,16 +75,6 @@ resource "aws_security_group_rule" "inbound-webserver-https" {
   to_port                  = 443
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.ACS["int-ALB-SG"].id
-  security_group_id        = aws_security_group.ACS["webservers-SG"].id
-}
-
-#testing connections
-resource "aws_security_group_rule" "https-from-bastion-webserver" {
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.ACS["bastion-SG"].id
   security_group_id        = aws_security_group.ACS["webservers-SG"].id
 }
 
