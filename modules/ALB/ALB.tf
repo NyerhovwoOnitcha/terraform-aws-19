@@ -139,7 +139,7 @@ resource "aws_lb_listener_rule" "tooling-listener" {
 
   condition {
     host_header {
-      values = ["tooling.techzeus.gq"]
+      values = ["tooling.techzeus.com"]
     }
   }
 }
