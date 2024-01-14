@@ -40,7 +40,7 @@ resource "aws_acm_certificate_validation" "techzeus" {
 # create records for tooling
 resource "aws_route53_record" "tooling" {
   zone_id = data.aws_route53_zone.techzeus.zone_id
-  name    = "tooling.techzeus.gq"
+  name    = "tooling.techzeus.shop"
   type    = "A"
 
   alias {
@@ -53,7 +53,7 @@ resource "aws_route53_record" "tooling" {
 # create records for wordpress
 resource "aws_route53_record" "wordpress" {
   zone_id = data.aws_route53_zone.techzeus.zone_id
-  name    = "wordpress.techzeus.gq"
+  name    = "wordpress.techzeus.shop"
   type    = "A"
 
   alias {
