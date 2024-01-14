@@ -81,7 +81,7 @@ Only extra thing we did here was adding commands to install java.
 ## Further Tinkering
 After creating your ami's with packer and feeding the amis to your infrastructure the target health checks will fail, this is cos even though the instances where created i.e the listeners, they still have not been configured, for the reverse proyy instance nginx has not been installed and thus /healthstatus has not been configured, same with the webservers where apache has not been installed and /healthstatus has not been configured.
 
-To solve this since our infrastucture already spins up the target, comment out:
+To solve this since our infrastucture already spins up the instances and add them to the target groups and as listeners, we will deregister them as targets and listeners, configure them using ansible and register them bac as targets:
     - Remove the instances as a listener for the loadbalancers i.e you created listeners for nginx target group and both webservers target groups which the instances, remove them.
 
     - The autoscaling groups is attached to the loadbalancer so comment out the autoscaling group for nginx, wordpress and tooling
@@ -92,6 +92,7 @@ We've created the instances via the ASG and deregistred them as targets to enabl
     - clone the ansible deploy folder into the bastion server
     - We will be using dynamic inventory to update the ansible inventory file, for this ansible will need access to our aws account. run the `aws configure` command and configure accordingly
     - clone the ansible-deploy folder into the bastion server, observe how we are using dynamic inventory to automatically get the ip address of our servers. we achieve this using a plugin. use the link for further reading. [Ansible dynamic inventory](https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html#examples).
+    - Test that the dynamic inventory is working and ansible can list the inventory `ansible-inventory -i inventory/aws_ec2.yml --graph`
     - update the following in the terraform script that will be used to configure the server. We did this in project 15
         - RDS endpoints for wordpress and tooling.
 
@@ -100,6 +101,7 @@ We've created the instances via the ASG and deregistred them as targets to enabl
 
 	    - Internal Loadbalancer DNS for nginx reverse-proxy. 
 
-### Explanation of tooling and wordpress ansible role
+### Explanation of nginx, tooling and wordpress ansible role.
+
     
     
