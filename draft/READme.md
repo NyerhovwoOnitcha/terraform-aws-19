@@ -1,0 +1,1 @@
+This directory contains the first draft from project 16, the codes here were refactored and the end project is project19 i.e the `terraform-aws-19` directory

@@ -1,0 +1,5 @@
+---
+- hosts: tag_Name_wordpress_asg
+  become: true
+  roles:
+     - wordpress

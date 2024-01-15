@@ -1,5 +1,5 @@
 # Refactoring the terraform script
-We will be making lost of changes to our configuration, to enabe us compare and contrast when we are done, duplicate your directory i.e `nPBL`. nPBL will contain the initial sketch script while the new directory `refactored` will have our updated config.
+We will be making lost of changes to our configuration, to enabe us compare and contrast when we are done, duplicate your directory i.e `draft`. nPBL will contain the initial sketch script while the new directory `terraform-aws-19` will have our updated config.
 
 
 ## Moving the Backend to s3
