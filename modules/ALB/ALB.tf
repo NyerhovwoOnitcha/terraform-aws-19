@@ -142,4 +142,4 @@ resource "aws_lb_listener_rule" "tooling-listener" {
       values = ["tooling.techzeus.shop"]
     }
   }
-}
+} 

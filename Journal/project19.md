@@ -79,21 +79,30 @@ The only difference here is that we are adding commands to create the self signe
 Only extra thing we did here was adding commands to install java.
 
 ## Further Tinkering
-After creating your ami's with packer and feeding the amis to your infrastructure the target health checks will fail, this is cos even though the instances where created i.e the listeners, they still have not been configured, for the reverse proyy instance nginx has not been installed and thus /healthstatus has not been configured, same with the webservers where apache has not been installed and /healthstatus has not been configured.
+After creating your ami's with packer and feeding the amis to your infrastructure, run the `terraform apply` to create your infrastructure. 
+You will observe that the target health checks will fail, this is cos even though the instances where created and added to the target groups of the load balancers, they still have not been configured, the /healthstatus has not been created so when the loadbalancer does it's healthcheck it fails, this is same for both the nginx targets and  the webservers where apache has not been installed and /healthstatus has not been configured.
 
-To solve this since our infrastucture already spins up the instances and add them to the target groups and as listeners, we will deregister them as targets and listeners, configure them using ansible and register them bac as targets:
-    - Remove the instances as a listener for the loadbalancers i.e you created listeners for nginx target group and both webservers target groups which the instances, remove them.
+To solve this since our infrastucture already spins up the instances and add them to the target groups, we will deregister them as targets and remove listeners for the load balacners, configure them using ansible and register them back as targets. Don't forget the sequence for creating a loadbalancer is, 
+i- Create the loadbalancer
+ii- Create the target groups
+iii- Create a listener that listens and forwards traffic to the targets
+iv - add the target resource i.e instances, LBs, etc
 
-    - The autoscaling groups is attached to the loadbalancer so comment out the autoscaling group for nginx, wordpress and tooling
-    - comment out the autoscaling group attachement to the nginx, wordpress and tooling 
+Back to configuring our infrastructure, to configure our target and get things working:
+    - Remove the instances as  listeners for the loadbalancers i.e comment out the code that creates listeners for the loadbalancers. This removes the instances as listners 
+    - Remove the autoscaling groups attachment to the loadbalancer. comment out the autoscaling group attachment to the external and internal loadbalancer, this way the autoscaling group creates the instances but they are not attached to the loadbalancer.
+
+Run `terraform apply` to update your infrastructure, now the LBs are up but have no targets, the instances are also created by the autoscaling grouo and ready to be be configured.
 
 ##  CONFIGURARION.
-We've created the instances via the ASG and deregistred them as targets to enable us make the necessary configurations, to do so we will be using ansible. We will be doing tnis from the bastion server so ssh into the bastion server.
-    - clone the ansible deploy folder into the bastion server
-    - We will be using dynamic inventory to update the ansible inventory file, for this ansible will need access to our aws account. run the `aws configure` command and configure accordingly
-    - clone the ansible-deploy folder into the bastion server, observe how we are using dynamic inventory to automatically get the ip address of our servers. we achieve this using a plugin. use the link for further reading. [Ansible dynamic inventory](https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html#examples).
-    - Test that the dynamic inventory is working and ansible can list the inventory `ansible-inventory -i inventory/aws_ec2.yml --graph`
-    - update the following in the terraform script that will be used to configure the server. We did this in project 15
+
+We've created the instances via the ASG and deregistred them as targets to enable us make the necessary configurations, to do so we will be using ansible. We will be doing this from the bastion server as the nginx, tooling and wordpress servers are configured to only accept ssh traffic from the bastion. So ssh into the bastion server. Ansible is already installed in the bastion when the ami was created using packer. 
+
+ - clone the ansible deploy folder into the bastion server, this folder contains the  dynamic inventory file and the ansible roles to  configure the server. 
+ - We will be using dynamic inventory to update the ansible inventory file, for this ansible will need access to our aws account. Run the `aws configure` command and configure accordingly. use the link for further reading. [Ansible dynamic inventory](https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html#examples).
+
+ - Test that the dynamic inventory is working and ansible can list the inventory `ansible-inventory -i inventory/aws_ec2.yml --graph`
+ - update the following in the terraform script that will be used to configure the server. We did this in project 15
         - RDS endpoints for wordpress and tooling.
 
 	    - Database Name, Password and username for wordpress and tooling
@@ -103,5 +112,87 @@ We've created the instances via the ASG and deregistred them as targets to enabl
 
 ### Explanation of nginx, tooling and wordpress ansible role.
 
+#### Nginx role:
+This role is straight forward, the only thing we are editing here is the template config file where we are updating the Internal Loadbalancer DNS. The internal LB receives traffic from the reverse proxy thus, the reverse proxy needs to know where to forward the traffic to.
+
+#### tooling role:
+Everything in the lauch template we used in project 15 is what we replicated in this role. The commands we used to configure the tooling server were:
+
+```
+#!/bin/bash
+sudo mount -t efs -o tls,accesspoint=fsap-09da47e007947145f fs-0c06b16d6bc639286:/ /var/www/
+yum install -y httpd 
+systemctl start httpd
+systemctl enable httpd
+yum module reset php -y
+yum module enable php:remi-7.4 -y
+yum install -y php php-common php-mbstring php-opcache php-intl php-xml php-gd php-curl php-mysqlnd php-fpm php-json
+systemctl start php-fpm
+systemctl enable php-fpm
+git clone https://github.com/Livingstone95/tooling-1.git
+cp -R tooling-1/html/* /var/www/html/
+cd tooling-1/
+mysql -h localhost/database-1.c5szxeahybda.us-east-1.rds.amazonaws.com -u admin -p toolingdb < tooling-db.sql
+cd /var/www/html/
+touch healthstatus
+sed -i "s/$db = mysqli_connect('mysql.tooling.svc.cluster.local', 'admin', 'admin', 'tooling');/$db = mysqli_connect('database-1.c5szxeahybda.us-east-1.rds.amazonaws.com', 'admin', 'cnl12345', 'toolingdb');/g" functions.php
+chcon -t httpd_sys_rw_content_t /var/www/html/ -R
+systemctl restart httpd
+```
+
+The code mounts the /var/www/ directory to the efs access point, install httpd and enable the service, same with php ans enable the php7.4 repo and start the php-fpm service.
+The code clones the tooling website code fom github anf deploys the code the html folder
+To connect to the database backend and applies the tooling script
+creates the /healthstatus dir to allow for healthchecks
+updates the `functions.php` file with the login credentials 
+aonfigures the selinux policy to allow nginx have read and write access to the /var/www/html/ dir
     
-    
+The ROLE DOES THE SAME THING
+The main talking points are:
+On the main.yml, the first task mounts the dir to the filesystem,  in this task you will need to update the `src` argument and the `opts` argument. Go to the filesystem access point on the aws console, click attach, copy and replace the `fs` and `fsap` on the main.yml file
+- The mod_ssl is installed on the server for tsl connections
+The `setup-db.yml` sets up connection between the website and the database, the main sticking points are:
+- Code installs PyMySQL, PyMySQL is a Python package that allows you to connect to MySQL or MariaDB databases using a pure-Python interface.
+- Code log into the RDS via the RDS endpoint along with the RDS user and password and creates a database named `toolingdb` 
+- Code updates the `functions.php file` with the login credentials of the toolngdb database.
+- What we didn't do in this role is apply the  `toolingdb script` as we did in project15
+The `setup-site.yml` has no sticking points, everything is straight forward.
+
+#### Wordpress role
+The commands used to manually configure the wordpress server turned to role:
+```
+#!/bin/bash
+mkdir /var/www/
+sudo mount -t efs -o tls,accesspoint=fsap-013515d0ca22b72ad fs-0c06b16d6bc639286:/ /var/www/
+yum install -y httpd 
+systemctl start httpd
+systemctl enable httpd
+yum module reset php -y
+yum module enable php:remi-7.4 -y
+yum install -y php php-common php-mbstring php-opcache php-intl php-xml php-gd php-curl php-mysqlnd php-fpm php-json
+systemctl start php-fpm
+systemctl enable php-fpm
+wget http://wordpress.org/latest.tar.gz
+tar xzvf latest.tar.gz
+rm -rf latest.tar.gz
+cp wordpress/wp-config-sample.php wordpress/wp-config.php
+mkdir /var/www/html/
+cp -R /wordpress/* /var/www/html/
+cd /var/www/html/
+touch healthstatus
+sed -i "s/localhost/database-1.c5szxeahybda.us-east-1.rds.amazonaws.com/g" wp-config.php 
+sed -i "s/username_here/admin/g" wp-config.php 
+sed -i "s/password_here/cnl12345/g" wp-config.php 
+sed -i "s/database_name_here/wordpressdb/g" wp-config.php 
+chcon -t httpd_sys_rw_content_t /var/www/html/ -R
+systemctl restart httpd
+```
+The role does exactly this. Only extra thing the role does it reinstall pip3
+
+ssh into the servers and curl localhost to make sure everything is working
+check the status of the service to ensure they are active
+check the `wp-config.php file` and the `functions.php file` to validate that the credentials were added.
+
+Since the configuration of the servers has been achived, return to your terraform config files, uncomment the code that creates listeners for the loadbalancers that we commented out to configure the servers, uncomment the autoscaling group attachment to the external and internal loadbalancer. 
+
+This action adds the servers back as targets for the LBs and deploy the infrastructure.. 
